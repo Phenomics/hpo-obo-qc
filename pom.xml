@@ -62,7 +62,7 @@
       </descriptorRefs>
       <archive>
        <manifest>
-        <mainClass>phenomics.PerformHpoOboQC</mainClass>
+        <mainClass>de.charite.phenomics.PerformHpoOboQC</mainClass>
        </manifest>
       </archive>
      </configuration>

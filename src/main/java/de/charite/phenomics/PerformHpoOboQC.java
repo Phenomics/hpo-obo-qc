@@ -1,13 +1,13 @@
-package phenomics;
+package de.charite.phenomics;
 
 import hpo.HPOutils;
 
 import java.util.ArrayList;
 
+import de.charite.phenomics.qcsteps.FreeTextAnnotationsQC;
+import de.charite.phenomics.qcsteps.QcStep;
+import de.charite.phenomics.qcsteps.RedundantLinksQC;
 import ontologizer.go.Ontology;
-import phenomics.qcsteps.FreeTextAnnotationsQC;
-import phenomics.qcsteps.QcStep;
-import phenomics.qcsteps.RedundantLinksQC;
 
 /**
  * Performs QC on hpo.obo, which is to provided as argument.
