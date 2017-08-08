@@ -1,4 +1,4 @@
-package de.charite.phenomics.qcsteps;
+package de.phenomics.qcsteps;
 
 import java.util.Arrays;
 import java.util.HashSet;

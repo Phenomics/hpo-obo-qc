@@ -1,12 +1,12 @@
-package de.charite.phenomics;
+package de.phenomics;
 
 import hpo.HPOutils;
 
 import java.util.ArrayList;
 
-import de.charite.phenomics.qcsteps.FreeTextAnnotationsQC;
-import de.charite.phenomics.qcsteps.QcStep;
-import de.charite.phenomics.qcsteps.RedundantLinksQC;
+import de.phenomics.qcsteps.FreeTextAnnotationsQC;
+import de.phenomics.qcsteps.QcStep;
+import de.phenomics.qcsteps.RedundantLinksQC;
 import ontologizer.go.Ontology;
 
 /**

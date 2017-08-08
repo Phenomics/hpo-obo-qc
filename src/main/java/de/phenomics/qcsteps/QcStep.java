@@ -1,4 +1,4 @@
-package de.charite.phenomics.qcsteps;
+package de.phenomics.qcsteps;
 
 public interface QcStep {
 

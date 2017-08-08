@@ -1,4 +1,4 @@
-package de.charite.phenomics.qcsteps;
+package de.phenomics.qcsteps;
 
 import ontologizer.go.Ontology;
 import ontologizer.go.Term;
