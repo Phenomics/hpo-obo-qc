@@ -1,12 +1,12 @@
 package de.phenomics;
 
-import hpo.HPOutils;
-
 import java.util.ArrayList;
 
+import de.phenomics.qcsteps.AnnotationReferences;
 import de.phenomics.qcsteps.FreeTextAnnotationsQC;
 import de.phenomics.qcsteps.QcStep;
 import de.phenomics.qcsteps.RedundantLinksQC;
+import hpo.HPOutils;
 import ontologizer.go.Ontology;
 
 /**
@@ -27,6 +27,7 @@ public class PerformHpoOboQC {
 		ArrayList<QcStep> qcSteps = new ArrayList<>();
 		qcSteps.add(new FreeTextAnnotationsQC(hpo));
 		qcSteps.add(new RedundantLinksQC(hpo));
+		qcSteps.add(new AnnotationReferences(args[0]));
 
 		// make the tests
 		qcSteps.stream().forEach(qc -> qc.performQC());
