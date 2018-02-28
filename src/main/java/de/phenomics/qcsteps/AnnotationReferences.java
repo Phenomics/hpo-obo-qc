@@ -35,7 +35,7 @@ public class AnnotationReferences implements QcStep {
 		}
 
 		if (errorLines.size() > 0) {
-			System.out.println("found lines with character { , which we have to avoid: ");
+			System.out.println("found " + errorLines.size() + " lines with character { , which we have to avoid: ");
 			for (String line : errorLines) {
 				System.out.println(" - " + line);
 			}
