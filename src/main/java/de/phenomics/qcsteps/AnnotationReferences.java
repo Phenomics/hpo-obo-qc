@@ -53,7 +53,7 @@ public class AnnotationReferences implements QcStep {
 	 * @return
 	 */
 	private void checkLine(String l) {
-		if (l.startsWith("def:") || l.startsWith("synonym:")) {
+		if (l.startsWith("def:") || l.startsWith("synonym:") || l.startsWith("name:")) {
 			if (l.contains("{")) {
 				errorLines.add(l);
 			}
