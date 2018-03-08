@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import de.phenomics.qcsteps.AnnotationReferences;
 import de.phenomics.qcsteps.FreeTextAnnotationsQC;
+import de.phenomics.qcsteps.ObsoleteTermsQC;
 import de.phenomics.qcsteps.QcStep;
 import de.phenomics.qcsteps.RedundantLinksQC;
 import hpo.HPOutils;
@@ -28,6 +29,7 @@ public class PerformHpoOboQC {
 		qcSteps.add(new FreeTextAnnotationsQC(hpo));
 		qcSteps.add(new RedundantLinksQC(hpo));
 		qcSteps.add(new AnnotationReferences(args[0]));
+		qcSteps.add(new ObsoleteTermsQC(hpo));
 
 		// make the tests
 		qcSteps.stream().forEach(qc -> qc.performQC());
