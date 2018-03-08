@@ -23,6 +23,7 @@ public class ObsoleteTermsQC implements QcStep {
 			TermID[] altids = t.getAlternatives();
 			if (altids != null && altids.length > 0) {
 				System.out.println("found obsolete class " + t + " with alternative ID(s): " + Arrays.toString(altids));
+				foundWrongObsoleteClass = true;
 			}
 		}
 
