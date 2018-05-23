@@ -1,6 +1,6 @@
 package de.phenomics.qcsteps;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -25,8 +25,10 @@ import ontologizer.go.TermID;
  * - a synonym should not be the same as the label of the term<br>
  * - a synonym should not be listed twice for a term<br>
  * - a text-def should not be the same as the label of the term<br>
- * - the value in replaced_by should only be HP:1234567 (not a purl or HP_1234567) (this might change later)<br>
- * - an id can only occur once. the only exception is that it is ok to be listed as alt_id and as id of an obsolete term
+ * - the value in replaced_by should only be HP:1234567 (not a purl or
+ * HP_1234567) (this might change later)<br>
+ * - an id can only occur once. the only exception is that it is ok to be listed
+ * as alt_id and as id of an obsolete term
  * 
  * @author Sebastian Koehler
  *
@@ -122,29 +124,27 @@ public class FreeTextAnnotationsQC implements QcStep {
 				term2problem.putAll(t, checkLabel);
 			}
 
-			if (t.getSynonyms() != null) {
-				String[] synonyms = t.getSynonyms();
-				for (String syn : synonyms) {
-					label2terms.put(syn.toLowerCase(), t);
+			ArrayList<String> synonyms = t.getSynonymsArrayList();
+			for (String syn : synonyms) {
+				label2terms.put(syn.toLowerCase(), t);
 
-					// only check if there is no definition
-					if (t.getDefinition() == null) {
-						// if no defintion, then we assume a synonym should be not too long!
-						if (syn.length() > 90) {
-							term2problem.put(t, "Synonym is more than 90 characters long. Looks wrong! " + syn);
-						}
+				// only check if there is no definition
+				if (t.getDefinition() == null) {
+					// if no defintion, then we assume a synonym should be not too long!
+					if (syn.length() > 90) {
+						term2problem.put(t, "Synonym is more than 90 characters long. Looks wrong! " + syn);
 					}
-					// HashSet<String> checkSyn = checkOtherText(t.getName(), syn);
-					// if (checkSyn.size() > 0)
-					// term2problem.putAll(t, checkSyn);
 				}
-
-				HashSet<String> synonymsHs = new HashSet<>(Arrays.asList(synonyms));
-				if (synonyms.length != synonymsHs.size()) {
-					term2problem.put(t, "List of synonyms contains duplicated entries");
-				}
-
+				// HashSet<String> checkSyn = checkOtherText(t.getName(), syn);
+				// if (checkSyn.size() > 0)
+				// term2problem.putAll(t, checkSyn);
 			}
+
+			HashSet<String> synonymsHs = new HashSet<>(synonyms);
+			if (synonyms.size() != synonymsHs.size()) {
+				term2problem.put(t, "List of synonyms contains duplicated entries");
+			}
+
 			if (t.getDefinition() != null) {
 				String def = t.getDefinition();
 				HashSet<String> checkDef = checkOtherText(t.getName(), def);
@@ -196,8 +196,7 @@ public class FreeTextAnnotationsQC implements QcStep {
 		if (duplicationProblem || formatProblem) {
 			System.out.println(QcStep.errorMessage);
 			System.exit(1);
-		}
-		else {
+		} else {
 			System.out.println(QcStep.everythingOkMessage);
 		}
 
