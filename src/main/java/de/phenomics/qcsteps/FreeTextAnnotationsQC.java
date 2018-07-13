@@ -120,7 +120,9 @@ public class FreeTextAnnotationsQC implements QcStep {
 				continue;
 
 			label2terms.put(t.getName().toLowerCase(), t);
-			definition2terms.put(t.getDefinition().toLowerCase().trim(), t);
+			if (t.getDefinition() != null) {
+				definition2terms.put(t.getDefinition().toLowerCase().trim(), t);
+			}
 
 			HashSet<String> checkLabel = checkLabel(t.getName());
 			if (checkLabel.size() > 0) {
