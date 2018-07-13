@@ -28,7 +28,8 @@ import ontologizer.go.TermID;
  * - the value in replaced_by should only be HP:1234567 (not a purl or
  * HP_1234567) (this might change later)<br>
  * - an id can only occur once. the only exception is that it is ok to be listed
- * as alt_id and as id of an obsolete term
+ * as alt_id and as id of an obsolete term <br>
+ * - no duplicated definitions<br>
  * 
  * @author Sebastian Koehler
  *
@@ -80,6 +81,7 @@ public class FreeTextAnnotationsQC implements QcStep {
 		 * Used to identify if label or synonym used twice in ontology
 		 */
 		HashMultimap<String, Term> label2terms = HashMultimap.create();
+		HashMultimap<String, Term> definition2terms = HashMultimap.create();
 
 		/*
 		 * Used to report other problems found in terms (e.g. multiple whitespaces)
@@ -93,8 +95,8 @@ public class FreeTextAnnotationsQC implements QcStep {
 			if (t.getReplacedBy() != null) {
 				Matcher m = oboTermId.matcher(t.getReplacedBy());
 				if (!m.matches()) {
-					term2problem.put(t, "Invalid value for replaced by found. I expect an obo-style ID (i.e. " + oboTermId.pattern()
-							+ "). The value found was: " + t.getReplacedBy());
+					term2problem.put(t, "Invalid value for replaced by found. I expect an obo-style ID (i.e. "
+							+ oboTermId.pattern() + "). The value found was: " + t.getReplacedBy());
 				}
 			}
 
@@ -105,8 +107,8 @@ public class FreeTextAnnotationsQC implements QcStep {
 					String altIdStr = tid.toString();
 					Matcher m = oboTermId.matcher(altIdStr);
 					if (!m.matches()) {
-						term2problem.put(t, "Invalid value for alt_id found. I expect an obo-style ID (i.e. " + oboTermId.pattern()
-								+ "). The value found was: " + altIdStr);
+						term2problem.put(t, "Invalid value for alt_id found. I expect an obo-style ID (i.e. "
+								+ oboTermId.pattern() + "). The value found was: " + altIdStr);
 					}
 
 					oboid2term.put(altIdStr, t);
@@ -118,6 +120,7 @@ public class FreeTextAnnotationsQC implements QcStep {
 				continue;
 
 			label2terms.put(t.getName().toLowerCase(), t);
+			definition2terms.put(t.getDefinition().toLowerCase().trim(), t);
 
 			HashSet<String> checkLabel = checkLabel(t.getName());
 			if (checkLabel.size() > 0) {
@@ -164,8 +167,8 @@ public class FreeTextAnnotationsQC implements QcStep {
 					++countTerms;
 			}
 			if (countTerms > 1) {
-				term2problem.put(firstTerm,
-						"Problem with duplicated ID " + oboid + ". This ID has been used for the the following terms: " + termsWithId);
+				term2problem.put(firstTerm, "Problem with duplicated ID " + oboid
+						+ ". This ID has been used for the the following terms: " + termsWithId);
 			}
 		}
 
@@ -191,12 +194,26 @@ public class FreeTextAnnotationsQC implements QcStep {
 			}
 		}
 
+		for (String definition : definition2terms.keySet()) {
+			if (definition2terms.get(definition).size() > 1) {
+
+				System.out.println("PROBLEM WITH DUPLICATE DEFINTION: " + definition);
+				System.out.println("FOUND AS DEFINTION FOR TERMS: ");
+				for (Term t : definition2terms.get(definition)) {
+					System.out.println("  - " + t);
+				}
+				System.out.println();
+				duplicationProblem = true;
+			}
+		}
+
 		boolean formatProblem = term2problem.keySet().size() > 0;
 
 		if (duplicationProblem || formatProblem) {
 			System.out.println(QcStep.errorMessage);
 			System.exit(1);
-		} else {
+		}
+		else {
 			System.out.println(QcStep.everythingOkMessage);
 		}
 
