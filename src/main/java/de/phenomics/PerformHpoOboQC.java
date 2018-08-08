@@ -7,7 +7,7 @@ import de.phenomics.qcsteps.FreeTextAnnotationsQC;
 import de.phenomics.qcsteps.ObsoleteTermsQC;
 import de.phenomics.qcsteps.QcStep;
 import de.phenomics.qcsteps.RedundantLinksQC;
-import hpo.HPOutils;
+import hpo.HpoDataProvider;
 import ontologizer.go.Ontology;
 
 /**
@@ -20,9 +20,10 @@ public class PerformHpoOboQC {
 	public static void main(String[] args) {
 
 		// parse hp obo
-		HPOutils.setOboFile(args[0]);
-		HPOutils.parseOntology();
-		Ontology hpo = HPOutils.hpo;
+		HpoDataProvider dataProvider = new HpoDataProvider();
+		dataProvider.setOboFile(args[0]);
+		dataProvider.parseOntology();
+		Ontology hpo = dataProvider.getHpo();
 
 		// define which steps to perform
 		ArrayList<QcStep> qcSteps = new ArrayList<>();
