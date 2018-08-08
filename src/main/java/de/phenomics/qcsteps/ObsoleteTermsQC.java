@@ -19,10 +19,9 @@ public class ObsoleteTermsQC implements QcStep {
 		System.out.println("Perform qc: " + getClass().getName());
 
 		boolean foundErrorWithObsoleteClass = false;
-		int i = 0;
-		int j = 0;
+
 		for (Term t : hpo.allObsoloteTerms()) {
-			i++;
+
 			TermID[] altids = t.getAlternatives();
 			if (altids != null && altids.length > 0) {
 				System.out.println("found obsolete class " + t + " with alternative ID(s): " + Arrays.toString(altids));
@@ -31,12 +30,16 @@ public class ObsoleteTermsQC implements QcStep {
 			Term alternative = hpo.getTermIncludingAlternatives(t.getIDAsString());
 			if (alternative == null || alternative.isObsolete()) {
 				System.out.println("Class " + t + " does not have a proper replacement via alt_ids!");
+				if (t.getReplacedBy() != null) {
+					Term repl = hpo.getTermIncludingAlternatives(t.getReplacedBy());
+					if (repl == null || repl.isObsolete()) {
+						System.out.println("Replaced by tag maps to obsolete or non-existing class " + t + " -> "
+								+ t.getReplacedBy() + " maps to " + repl);
+					}
+				}
 				foundErrorWithObsoleteClass = true;
-				j++;
 			}
 		}
-		System.out.println(i);
-		System.out.println(j);
 		if (foundErrorWithObsoleteClass) {
 			System.out.println(QcStep.errorMessage);
 			System.exit(1);
