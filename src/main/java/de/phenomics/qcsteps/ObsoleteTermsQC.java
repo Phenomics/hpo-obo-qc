@@ -19,7 +19,6 @@ public class ObsoleteTermsQC implements QcStep {
 		System.out.println("Perform qc: " + getClass().getName());
 
 		boolean foundErrorWithObsoleteClass = false;
-
 		for (Term t : hpo.allObsoloteTerms()) {
 
 			TermID[] altids = t.getAlternatives();
@@ -29,13 +28,25 @@ public class ObsoleteTermsQC implements QcStep {
 			}
 			Term alternative = hpo.getTermIncludingAlternatives(t.getIDAsString());
 			if (alternative == null || alternative.isObsolete()) {
-				System.out.println("Class " + t + " does not have a proper replacement via alt_ids!");
+				// System.out.println("Class " + t + " does not have a proper replacement via
+				// alt_ids!");
 				if (t.getReplacedBy() != null) {
 					Term repl = hpo.getTermIncludingAlternatives(t.getReplacedBy());
 					if (repl == null || repl.isObsolete()) {
-						System.out.println("Replaced by tag maps to obsolete or non-existing class " + t + " -> "
-								+ t.getReplacedBy() + " maps to " + repl);
+						System.out.println("Replaced by tag maps to obsolete class " + t + " -> " + t.getReplacedBy());
+						foundErrorWithObsoleteClass = true;
 					}
+				}
+				else if (t.getConsider() != null) {
+					Term consider = hpo.getTermIncludingAlternatives(t.getConsider());
+					if (consider == null || consider.isObsolete()) {
+						System.out.println("Consider tag maps to obsolete class " + t + " -> " + t.getConsider());
+						foundErrorWithObsoleteClass = true;
+					}
+				}
+				else {
+					System.out.println("Obsolete class " + t + " does not have a replace_by or a consider tag!");
+					foundErrorWithObsoleteClass = true;
 				}
 				foundErrorWithObsoleteClass = true;
 			}
