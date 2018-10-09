@@ -22,8 +22,9 @@ public class ObsoleteTermsQC implements QcStep {
 		for (Term t : hpo.allObsoloteTerms()) {
 
 			if (t.getParents().length > 0) {
-				System.out.println("found obsolete class " + t + " a parent class: " + Arrays.toString(t.getParents()));
+				System.out.println("found obsolete class " + t + " with a parent class.");
 				System.out.println("obsolete classes are not allowed to have superclasses! ");
+				System.out.println("You HAVE to use the obsolescence plugin in Protege!!! ");
 				foundErrorWithObsoleteClass = true;
 			}
 
