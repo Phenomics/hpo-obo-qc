@@ -8,9 +8,9 @@ import java.util.regex.Pattern;
 
 import com.google.common.collect.HashMultimap;
 
-import ontologizer.go.Ontology;
-import ontologizer.go.Term;
-import ontologizer.go.TermID;
+import ontologizer.ontology.Ontology;
+import ontologizer.ontology.Term;
+import ontologizer.ontology.TermID;
 
 /**
  * Check the free-text fields in the ontology:<br>

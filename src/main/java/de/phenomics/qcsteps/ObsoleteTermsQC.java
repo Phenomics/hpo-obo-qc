@@ -2,9 +2,9 @@ package de.phenomics.qcsteps;
 
 import java.util.Arrays;
 
-import ontologizer.go.Ontology;
-import ontologizer.go.Term;
-import ontologizer.go.TermID;
+import ontologizer.ontology.Ontology;
+import ontologizer.ontology.Term;
+import ontologizer.ontology.TermID;
 
 public class ObsoleteTermsQC implements QcStep {
 

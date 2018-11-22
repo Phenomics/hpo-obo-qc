@@ -8,7 +8,7 @@ import de.phenomics.qcsteps.ObsoleteTermsQC;
 import de.phenomics.qcsteps.QcStep;
 import de.phenomics.qcsteps.RedundantLinksQC;
 import hpo.HpoDataProvider;
-import ontologizer.go.Ontology;
+import ontologizer.ontology.Ontology;
 
 /**
  * Performs QC on hpo.obo, which is to provided as argument.
