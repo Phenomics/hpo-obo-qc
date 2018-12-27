@@ -43,13 +43,17 @@ public class ObsoleteTermsQC implements QcStep {
 						System.out.println("Replaced by tag maps to obsolete class " + t + " -> " + t.getReplacedBy());
 						foundErrorWithObsoleteClass = true;
 					}
-				} else if (t.getConsider() != null) {
-					Term consider = hpo.getTermIncludingAlternatives(t.getConsider());
-					if (consider == null || consider.isObsolete()) {
-						System.out.println("Consider tag maps to obsolete class " + t + " -> " + t.getConsider());
-						foundErrorWithObsoleteClass = true;
+				}
+				else if (t.getConsider() != null) {
+					for (String considerId : t.getConsider()) {
+						Term consider = hpo.getTermIncludingAlternatives(considerId);
+						if (consider == null || consider.isObsolete()) {
+							System.out.println("Consider tag maps to obsolete class " + t + " -> " + t.getConsider());
+							foundErrorWithObsoleteClass = true;
+						}
 					}
-				} else {
+				}
+				else {
 					System.out.println("Obsolete class " + t + " does not have a replace_by or a consider tag!");
 					foundErrorWithObsoleteClass = true;
 				}
@@ -58,7 +62,8 @@ public class ObsoleteTermsQC implements QcStep {
 		if (foundErrorWithObsoleteClass) {
 			System.out.println(QcStep.errorMessage);
 			System.exit(1);
-		} else {
+		}
+		else {
 			System.out.println(QcStep.everythingOkMessage);
 		}
 	}
