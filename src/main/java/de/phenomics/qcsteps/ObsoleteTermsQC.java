@@ -69,9 +69,10 @@ public class ObsoleteTermsQC implements QcStep {
 		for (Term t : hpo) {
 			for (ParentTermID pid : t.getParents()) {
 				Term p = hpo.getTerm(pid.termid);
-				if (p == null && allObsIds.contains(pid.termid.toString()))
+				if (p == null && allObsIds.contains(pid.termid.toString())) {
 					System.out.println("Class " + t + " is subclass of obsolete class " + pid.termid + " !");
-				foundErrorWithObsoleteClass = true;
+					foundErrorWithObsoleteClass = true;
+				}
 			}
 		}
 
