@@ -9,6 +9,8 @@ import java.util.regex.Pattern;
 import com.google.common.collect.HashMultimap;
 
 import ontologizer.ontology.Ontology;
+import ontologizer.ontology.Synonym;
+import ontologizer.ontology.Synonym.Synonymtype;
 import ontologizer.ontology.Term;
 import ontologizer.ontology.TermID;
 
@@ -129,15 +131,20 @@ public class FreeTextAnnotationsQC implements QcStep {
 				term2problem.putAll(t, checkLabel);
 			}
 
-			ArrayList<String> synonyms = t.getSynonymsArrayList();
-			for (String syn : synonyms) {
-				label2terms.put(syn.toLowerCase(), t);
+			Synonym[] synoymsObjs = t.getSynonymsAsObj();
+
+			for (Synonym syn : synoymsObjs) {
+
+				String synLabel = syn.getSynonymLabel().toLowerCase();
+				if (!syn.getTypes().contains(Synonymtype.abbreviation)) {
+					label2terms.put(synLabel, t);
+				}
 
 				// only check if there is no definition
 				if (t.getDefinition() == null) {
 					// if no defintion, then we assume a synonym should be not too long!
-					if (syn.length() > 90) {
-						term2problem.put(t, "Synonym is more than 90 characters long. Looks wrong! " + syn);
+					if (synLabel.length() > 90) {
+						term2problem.put(t, "Synonym is more than 90 characters long. Looks wrong! " + synLabel);
 					}
 				}
 				// HashSet<String> checkSyn = checkOtherText(t.getName(), syn);
@@ -145,6 +152,7 @@ public class FreeTextAnnotationsQC implements QcStep {
 				// term2problem.putAll(t, checkSyn);
 			}
 
+			ArrayList<String> synonyms = t.getSynonyms();
 			HashSet<String> synonymsHs = new HashSet<>(synonyms);
 			if (synonyms.size() != synonymsHs.size()) {
 				term2problem.put(t, "List of synonyms contains duplicated entries");
