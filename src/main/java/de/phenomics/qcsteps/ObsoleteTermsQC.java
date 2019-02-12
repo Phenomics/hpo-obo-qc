@@ -1,8 +1,10 @@
 package de.phenomics.qcsteps;
 
 import java.util.Arrays;
+import java.util.HashSet;
 
 import ontologizer.ontology.Ontology;
+import ontologizer.ontology.ParentTermID;
 import ontologizer.ontology.Term;
 import ontologizer.ontology.TermID;
 
@@ -59,6 +61,20 @@ public class ObsoleteTermsQC implements QcStep {
 				}
 			}
 		}
+
+		HashSet<String> allObsIds = new HashSet<>();
+		for (Term t : hpo.allObsoloteTerms())
+			allObsIds.add(t.getIDAsString());
+
+		for (Term t : hpo) {
+			for (ParentTermID pid : t.getParents()) {
+				Term p = hpo.getTerm(pid.termid);
+				if (p == null && allObsIds.contains(pid.termid.toString()))
+					System.out.println("Class " + t + " is subclass of obsolete class " + pid.termid + " !");
+				foundErrorWithObsoleteClass = true;
+			}
+		}
+
 		if (foundErrorWithObsoleteClass) {
 			System.out.println(QcStep.errorMessage);
 			System.exit(1);
