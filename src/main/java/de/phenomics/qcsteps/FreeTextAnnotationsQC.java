@@ -136,10 +136,19 @@ public class FreeTextAnnotationsQC implements QcStep {
 			for (Synonym syn : synoymsObjs) {
 
 				String synLabel = syn.getSynonymLabel().toLowerCase();
-				if (!syn.getTypes().contains(Synonymtype.abbreviation)) {
+				
+				
+//				this is currently broken, TODO need to fix upstream lib somehow. Need server to host jar as maven source
+//				if (!syn.getTypes().contains(Synonymtype.abbreviation)) {
+//					label2terms.put(synLabel, t);
+//				}
+				
+				// alternative solution to solution to above
+				if (!synLabel.equals("asd")){
 					label2terms.put(synLabel, t);
 				}
-
+				
+				
 				// only check if there is no definition
 				if (t.getDefinition() == null) {
 					// if no defintion, then we assume a synonym should be not too long!
